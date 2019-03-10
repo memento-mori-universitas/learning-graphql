@@ -1,0 +1,15 @@
+version: 2.0
+
+id: learning-graphql
+
+about:
+  title: Learning GraphQL
+  description: Learning GraphQL
+
+contacts:
+  - type: author
+    name: Gonzalo Vazquez
+    email: gonzalovazquez010@gmail.com
+
+priority:
+  - type: low
