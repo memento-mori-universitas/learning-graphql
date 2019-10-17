@@ -123,3 +123,126 @@ Result
   }
 }
 ```
+
+#### Aliases
+
+Since you cannot directly query for the same field with different arguements, you need to uses *aliases* that let you rename the result of a field into anything we want.
+
+Query
+
+```
+{
+  empireHero: hero(episode: EMPIRE) {
+    name
+  }
+  jediHero: hero(episode: JEDI) {
+    name
+  }
+}
+```
+
+Result
+
+```
+{
+  "data": {
+    "empireHero": {
+      "name": "Luke Skywalker"
+    },
+    "jediHero": {
+      "name": "R2-D2"
+    }
+  }
+}
+```
+
+#### Fragments
+
+If we have a complicated query a way to optimize and avoid duplication would be to use *fragments*. Fragments allow you to construct sets of fields, and the include them in queries where we need to.
+
+Query
+
+```
+{
+  one: hero(episode: EMPIRE) {
+    ...fieldGroup
+  }
+  two: hero(episode: JEDI) {
+    ...fieldGroup
+  }
+  three: human(id: 1001){
+    ...fieldGroup
+  }
+}
+
+fragment fieldGroup on Character {
+  name
+  appearsIn
+  friends {
+    name
+  }
+}
+```
+
+Result
+
+```
+{
+  "data": {
+    "one": {
+      "name": "Luke Skywalker",
+      "appearsIn": [
+        "NEWHOPE",
+        "EMPIRE",
+        "JEDI"
+      ],
+      "friends": [
+        {
+          "name": "Han Solo"
+        },
+        {
+          "name": "Leia Organa"
+        },
+        {
+          "name": "C-3PO"
+        },
+        {
+          "name": "R2-D2"
+        }
+      ]
+    },
+    "two": {
+      "name": "R2-D2",
+      "appearsIn": [
+        "NEWHOPE",
+        "EMPIRE",
+        "JEDI"
+      ],
+      "friends": [
+        {
+          "name": "Luke Skywalker"
+        },
+        {
+          "name": "Han Solo"
+        },
+        {
+          "name": "Leia Organa"
+        }
+      ]
+    },
+    "three": {
+      "name": "Darth Vader",
+      "appearsIn": [
+        "NEWHOPE",
+        "EMPIRE",
+        "JEDI"
+      ],
+      "friends": [
+        {
+          "name": "Wilhuff Tarkin"
+        }
+      ]
+    }
+  }
+}
+```
