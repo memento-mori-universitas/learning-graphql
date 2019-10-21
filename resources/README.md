@@ -373,4 +373,28 @@ query HeroNameAndFriends($episode: Episode = JEDI) {
 }
 ```
 
-#### Directives 
+#### Directives
+
+With variables we are all can avoid doing manual string interpolation. However passing values is just one part of the dynamic nature.
+
+For example, we can imagine a UI component that has a summarized view and a detailed view. One view requires more information that the other.
+
+For such use case we can use a Directive
+
+
+Query
+
+```
+query Hero($episode: Episode, $withFriends: Boolean!) {
+  hero(episode: $episode) {
+    name
+    friends @include(if: $withFriends) {
+      name
+    }
+  }
+}
+```
+
+The above query, we are passing it the boolean `$withFriends` which conditionally shows the friends field.
+
+
