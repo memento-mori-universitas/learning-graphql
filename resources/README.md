@@ -372,3 +372,5 @@ query HeroNameAndFriends($episode: Episode = JEDI) {
   }
 }
 ```
+
+#### Directives 
