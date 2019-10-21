@@ -246,3 +246,129 @@ Result
   }
 }
 ```
+
+It is also possible to use variables inside fragments.
+
+We can pass the `$first` variable and then use it to show the number of friends connections to return.
+
+```
+query HeroComparison($first: Int = 3) {
+  leftComparison: hero(episode: EMPIRE) {
+    ...comparisonFields
+  }
+  rightComparison: hero(episode: JEDI) {
+    ...comparisonFields
+  }
+}
+
+fragment comparisonFields on Character {
+  name
+  friendsConnection(first: $first) {
+    totalCount
+    edges {
+      node {
+        name
+      }
+    }
+  }
+}
+```
+
+#### Operation Name
+
+Doing shorthand syntax is useful however when dealing with production services it is best practice to use **Operation type** and **Operation Name**.
+
+The operation type is either a query, mutation, or subscription.
+
+Shorthand syntax
+
+```
+{
+  hero {
+    name
+    friends {
+      name
+    }
+  }
+}
+```
+
+Syntax with operation type and operation name
+
+```
+query HeroNameAndFriends {
+  hero {
+    name
+    friends {
+      name
+    }
+  }
+}
+```
+
+#### Variables
+
+In order to support dynamic manipulation of query string at runtime, rather than doing manipulation of the query in the client-side, GraphQL supports `variables`.
+
+In order to start working with variables, we need to do three things:
+
+1. Replace the static value in the query with `$variableName`
+2. Declare `$variableName` as one of the variables accepted by the query
+3. Pass `variableName: value` in the separate, transport-specific (usually JSON) variables dictionary
+
+Query
+
+```
+query HeroNameAndFriends($episode: Episode) {
+  hero(episode: $episode) {
+    name
+    friends {
+      name
+    }
+  }
+}
+```
+
+Variables
+
+```
+{
+  "episode": "JEDI"
+}
+```
+
+Result
+
+```
+{
+  "data": {
+    "hero": {
+      "name": "R2-D2",
+      "friends": [
+        {
+          "name": "Luke Skywalker"
+        },
+        {
+          "name": "Han Solo"
+        },
+        {
+          "name": "Leia Organa"
+        }
+      ]
+    }
+  }
+}
+```
+
+We can also define *default values* to our variables
+
+```
+query HeroNameAndFriends($episode: Episode = JEDI) {
+  hero(episode: $episode) {
+    name
+    friends {
+      name
+    }
+  }
+}
+```
