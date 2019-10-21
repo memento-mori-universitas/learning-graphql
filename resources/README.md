@@ -454,3 +454,60 @@ Return
 
 You might also notice that, in this example, the `$review: ReviewInput!` variable we passed is not a scalar. It is an **input object**, a special type of object type that can be passed in as an argument.
 
+#### Inline Fragments
+
+With inline fragmenets we are able to define interfaces and union types.
+
+For example, in the above example we can define an inline fragement to return one field that is only available on the `Human` type and another field that is only available on the `Droid` type.
+
+Query
+
+```
+query heroesForEpisode($ep: Episode!){
+  hero(episode: $ep) {
+    name
+    ...on Human {
+      height
+    }
+    ...on Droid {
+      primaryFunction
+    }
+  }
+}
+```
+
+Variables
+
+```
+{
+  "ep": "EMPIRE"
+}
+```
+
+Result
+
+```
+{
+  "data": {
+    "hero": {
+      "name": "Luke Skywalker",
+      "height": 1.72
+    }
+  }
+}
+```
+
+Result if variable is set to `"ep": "NEWHOPE"` it returns a `Droid` so the result would be
+
+```
+{
+  "data": {
+    "hero": {
+      "name": "R2-D2",
+      "primaryFunction": "Astromech"
+    }
+  }
+}
+```
+
+In this query, the hero field returns the type `Character`, which might be either a `Human` or a `Droid` depending on the `episode` argument. In the direct selection, you can only ask for fields that exist on the `Character` interface, such as `name`. 
