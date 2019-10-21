@@ -398,3 +398,59 @@ query Hero($episode: Episode, $withFriends: Boolean!) {
 The above query, we are passing it the boolean `$withFriends` which conditionally shows the friends field.
 
 
+Variable
+
+```
+{
+  "episode": "JEDI",
+  "withFriends": false
+}
+```
+
+A directive can be attached to a field or fragment inclusion. The core GraphQL spec includes exactly two directives:
+
+- `@include(if: Boolean)` Only include this field in the result if the argunment is `true`
+- `@skip(if: Boolean)` Skip this field if the argument is `true`
+
+#### Mutations
+
+Any operation that causes writes should be sent explicity via a mutation. Just like in queries, if the mutation field returns an object type, you can ask for nested fields. This can be useful for fetching the new state of an object after an update.
+
+Query
+
+```
+mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) {
+  createReview(episode: $ep, review: $review) {
+    stars
+    commentary
+  }
+}
+```
+
+Variables
+
+```
+{
+  "ep": "JEDI",
+  "review": {
+    "stars": 5,
+    "commentary": "This is a great movie!"
+  }
+}
+```
+
+Return
+
+```
+{
+  "data": {
+    "createReview": {
+      "stars": 5,
+      "commentary": "This is a great movie!"
+    }
+  }
+}
+```
+
+You might also notice that, in this example, the `$review: ReviewInput!` variable we passed is not a scalar. It is an **input object**, a special type of object type that can be passed in as an argument.
+
