@@ -511,3 +511,11 @@ Result if variable is set to `"ep": "NEWHOPE"` it returns a `Droid` so the resul
 ```
 
 In this query, the hero field returns the type `Character`, which might be either a `Human` or a `Droid` depending on the `episode` argument. In the direct selection, you can only ask for fields that exist on the `Character` interface, such as `name`. 
+
+
+#### Type langugage
+
+Since GraphQL can be written in any langugage, we define our own simple language called `GraphQL schema language`. 
+
+##### Object types and fields
+
